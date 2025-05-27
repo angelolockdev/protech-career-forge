@@ -1,85 +1,11 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Link } from "react-router-dom";
-import { 
-  FileText, 
-  Target, 
-  MessageSquare, 
-  Brain, 
-  DollarSign, 
-  Upload,
-  Plus,
-  TrendingUp,
-  Clock,
-  CheckCircle
-} from "lucide-react";
+import DashboardStats from "@/components/dashboard/DashboardStats";
+import QuickActions from "@/components/dashboard/QuickActions";
+import RecentActivity from "@/components/dashboard/RecentActivity";
+import ProgressSection from "@/components/dashboard/ProgressSection";
 
 const Dashboard = () => {
-  const recentAnalyses = [
-    {
-      id: 1,
-      type: "CV Analysis",
-      title: "CV_Développeur_Frontend.pdf",
-      score: 85,
-      date: "Il y a 2 heures",
-      status: "completed"
-    },
-    {
-      id: 2,
-      type: "Job Matching",
-      title: "Développeur React - TechCorp",
-      score: 92,
-      date: "Hier",
-      status: "completed"
-    },
-    {
-      id: 3,
-      type: "Cover Letter",
-      title: "Lettre pour poste Senior Dev",
-      score: 88,
-      date: "Il y a 3 jours",
-      status: "completed"
-    }
-  ];
-
-  const quickActions = [
-    {
-      icon: FileText,
-      title: "Analyser un CV",
-      description: "Uploadez votre CV pour une analyse IA complète",
-      action: "Commencer l'analyse",
-      color: "bg-blue-500",
-      link: "/cv-analysis"
-    },
-    {
-      icon: Target,
-      title: "Comparer avec une offre",
-      description: "Analysez la compatibilité CV/offre d'emploi",
-      action: "Nouvelle comparaison",
-      color: "bg-green-500",
-      link: "/job-matching"
-    },
-    {
-      icon: MessageSquare,
-      title: "Générer une lettre",
-      description: "Créez une lettre de motivation personnalisée",
-      action: "Créer une lettre",
-      color: "bg-purple-500",
-      link: "/cover-letter"
-    },
-    {
-      icon: Brain,
-      title: "Simuler un entretien",
-      description: "Préparez-vous avec notre simulateur IA",
-      action: "Commencer la simulation",
-      color: "bg-orange-500",
-      link: "/interview-simulator"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
       <div className="container mx-auto max-w-7xl">
@@ -95,184 +21,18 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Analyses ce mois</p>
-                  <p className="text-2xl font-bold text-blue-600">24</p>
-                </div>
-                <FileText className="h-8 w-8 text-blue-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Score moyen</p>
-                  <p className="text-2xl font-bold text-green-600">87%</p>
-                </div>
-                <TrendingUp className="h-8 w-8 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Entretiens simulés</p>
-                  <p className="text-2xl font-bold text-purple-600">8</p>
-                </div>
-                <Brain className="h-8 w-8 text-purple-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Temps économisé</p>
-                  <p className="text-2xl font-bold text-orange-600">12h</p>
-                </div>
-                <Clock className="h-8 w-8 text-orange-500" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <DashboardStats />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Quick Actions */}
-          <div className="lg:col-span-2">
-            <Card className="bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Plus className="h-5 w-5 mr-2" />
-                  Actions rapides
-                </CardTitle>
-                <CardDescription>
-                  Choisissez une action pour commencer votre optimisation
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {quickActions.map((action, index) => (
-                  <Link key={index} to={action.link}>
-                    <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
-                      <CardContent className="p-6">
-                        <div className="flex items-start space-x-4">
-                          <div className={`p-3 rounded-lg ${action.color} text-white`}>
-                            <action.icon className="h-6 w-6" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 mb-2">{action.title}</h3>
-                            <p className="text-sm text-gray-600 mb-3">{action.description}</p>
-                            <Button size="sm" className="w-full">
-                              {action.action}
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Additional Quick Action for Salary Estimator */}
-            <Card className="bg-white/80 backdrop-blur-sm mt-6">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <DollarSign className="h-5 w-5 mr-2" />
-                  Estimation salariale
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-600 mb-2">Découvrez votre valeur sur le marché</p>
-                    <p className="text-sm text-gray-500">Basé sur votre profil et la localisation</p>
-                  </div>
-                  <Link to="/salary-estimator">
-                    <Button>
-                      <DollarSign className="h-4 w-4 mr-2" />
-                      Estimer
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <QuickActions />
 
           {/* Recent Activity */}
-          <div>
-            <Card className="bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle>Activité récente</CardTitle>
-                <CardDescription>Vos dernières analyses et optimisations</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {recentAnalyses.map((analysis) => (
-                  <div key={analysis.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex-shrink-0">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {analysis.title}
-                      </p>
-                      <p className="text-xs text-gray-500">{analysis.type}</p>
-                      <p className="text-xs text-gray-400">{analysis.date}</p>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <Badge variant="secondary" className="text-xs">
-                        {analysis.score}%
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+          <RecentActivity />
         </div>
 
         {/* Progress Section */}
-        <div className="mt-8">
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle>Progression de votre profil</CardTitle>
-              <CardDescription>Améliorez votre score pour maximiser vos chances</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium">Optimisation CV</span>
-                    <span className="text-sm text-gray-500">85%</span>
-                  </div>
-                  <Progress value={85} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium">Préparation entretiens</span>
-                    <span className="text-sm text-gray-500">72%</span>
-                  </div>
-                  <Progress value={72} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium">Matching offres</span>
-                    <span className="text-sm text-gray-500">91%</span>
-                  </div>
-                  <Progress value={91} className="h-2" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <ProgressSection />
       </div>
     </div>
   );
