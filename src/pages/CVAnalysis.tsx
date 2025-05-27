@@ -1,257 +1,273 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Upload, 
-  FileText, 
-  CheckCircle, 
-  AlertTriangle, 
-  TrendingUp,
-  Target,
-  Download,
-  RefreshCw
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Upload, FileText, Brain, Target, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Header } from "@/components/Header";
 
 const CVAnalysis = () => {
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false);
-  const { toast } = useToast();
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
-
-    setIsAnalyzing(true);
-    
-    // Simulate analysis
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setAnalysisComplete(true);
-      toast({
-        title: "Analyse terminée",
-        description: "Votre CV a été analysé avec succès par notre IA",
-      });
-    }, 3000);
-  };
-
-  const analysisResults = {
-    overallScore: 85,
-    categories: [
-      {
-        name: "Structure et lisibilité",
-        score: 92,
-        status: "excellent",
-        improvements: ["Format professionnel respecté", "Hiérarchie claire"]
-      },
-      {
-        name: "Mots-clés et compétences",
-        score: 78,
-        status: "good",
-        improvements: ["Ajouter 'React', 'TypeScript'", "Mentionner l'agilité"]
-      },
-      {
-        name: "Expériences valorisées",
-        score: 85,
-        status: "good", 
-        improvements: ["Quantifier les résultats", "Ajouter des métriques"]
-      },
-      {
-        name: "Orthographe et grammaire",
-        score: 95,
-        status: "excellent",
-        improvements: ["Aucune erreur détectée"]
-      }
-    ],
-    keywordsMissing: ["React", "TypeScript", "Agile", "CI/CD", "Docker"],
-    suggestedImprovements: [
-      "Ajouter une section 'Projets personnels' pour valoriser votre expertise technique",
-      "Quantifier vos réalisations avec des chiffres (ex: 'Amélioration de 30% des performances')",
-      "Inclure des certifications techniques récentes",
-      "Optimiser la section compétences avec des mots-clés du secteur"
-    ]
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "excellent":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "good":
-        return <TrendingUp className="h-5 w-5 text-yellow-500" />;
-      default:
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    if (file) {
+      setUploadedFile(file);
+      console.log("File uploaded:", file.name);
     }
   };
 
+  const handleAnalyze = () => {
+    if (uploadedFile) {
+      setIsAnalyzing(true);
+      console.log("Starting CV analysis for:", uploadedFile.name);
+      
+      // Simulate analysis process
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        setAnalysisComplete(true);
+        console.log("Analysis complete!");
+      }, 3000);
+    }
+  };
+
+  const analysisResults = {
+    overallScore: 87,
+    strengths: [
+      "Strong technical skills section",
+      "Clear work experience progression",
+      "Good use of action verbs",
+      "Relevant education background"
+    ],
+    improvements: [
+      "Add more quantified achievements",
+      "Include relevant keywords for your target role",
+      "Improve summary section impact",
+      "Add portfolio links or projects"
+    ],
+    keywordMatch: 73,
+    readabilityScore: 91,
+    atsCompatibility: 85
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
-      <div className="container mx-auto max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Analyse de CV par l'IA</h1>
-          <p className="text-gray-600">Uploadez votre CV pour une analyse complète et des suggestions personnalisées</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <Header />
+      <div className="container mx-auto max-w-4xl p-6">
+        <div className="flex items-center mb-8">
+          <Link to="/dashboard">
+            <Button variant="outline" size="sm" className="mr-4">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Retour au tableau de bord
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Analyse de CV</h1>
+            <p className="text-gray-600 mt-2">Optimisez votre CV avec notre IA avancée</p>
+          </div>
         </div>
 
         {!analysisComplete ? (
-          <Card className="bg-white/80 backdrop-blur-sm">
-            <CardHeader className="text-center">
-              <CardTitle className="flex items-center justify-center">
-                <FileText className="h-6 w-6 mr-2" />
-                Uploader votre CV
-              </CardTitle>
-              <CardDescription>
-                Formats acceptés: PDF, DOCX (max 5MB)
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
-              {!isAnalyzing ? (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 hover:border-blue-500 transition-colors">
-                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-gray-900 mb-2">
-                    Glissez votre CV ici ou cliquez pour parcourir
-                  </p>
-                  <p className="text-gray-500 mb-4">L'analyse prend environ 30 secondes</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Upload Section */}
+            <Card className="bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Upload className="h-5 w-5 mr-2" />
+                  Upload votre CV
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                   <input
                     type="file"
-                    accept=".pdf,.docx"
+                    accept=".pdf,.doc,.docx"
                     onChange={handleFileUpload}
                     className="hidden"
                     id="cv-upload"
                   />
-                  <label htmlFor="cv-upload">
-                    <Button size="lg" className="cursor-pointer">
-                      Choisir un fichier
-                    </Button>
+                  <label
+                    htmlFor="cv-upload"
+                    className="cursor-pointer flex flex-col items-center"
+                  >
+                    <FileText className="h-12 w-12 text-gray-400 mb-4" />
+                    <p className="text-lg font-medium text-gray-700 mb-2">
+                      Cliquez pour uploader votre CV
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Formats supportés: PDF, DOC, DOCX (max 10MB)
+                    </p>
                   </label>
                 </div>
-              ) : (
-                <div className="py-12">
-                  <RefreshCw className="h-12 w-12 text-blue-500 mx-auto mb-4 animate-spin" />
-                  <p className="text-lg font-medium text-gray-900 mb-2">
-                    Analyse en cours...
-                  </p>
-                  <p className="text-gray-500 mb-4">Notre IA examine votre CV en détail</p>
-                  <Progress value={75} className="w-64 mx-auto" />
+
+                {uploadedFile && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <FileText className="h-5 w-5 text-green-600 mr-3" />
+                      <div>
+                        <p className="font-medium text-green-800">{uploadedFile.name}</p>
+                        <p className="text-sm text-green-600">
+                          {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <Button 
+                  onClick={handleAnalyze}
+                  disabled={!uploadedFile || isAnalyzing}
+                  className="w-full"
+                  size="lg"
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <Brain className="h-5 w-5 mr-2 animate-spin" />
+                      Analyse en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Brain className="h-5 w-5 mr-2" />
+                      Analyser mon CV
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Analysis Progress */}
+            <Card className="bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle>Processus d'analyse</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Extraction du contenu</span>
+                    <Badge variant={uploadedFile ? "default" : "secondary"}>
+                      {uploadedFile ? "Terminé" : "En attente"}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Analyse sémantique</span>
+                    <Badge variant={isAnalyzing ? "default" : "secondary"}>
+                      {isAnalyzing ? "En cours" : "En attente"}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Génération des suggestions</span>
+                    <Badge variant="secondary">En attente</Badge>
+                  </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+
+                {isAnalyzing && (
+                  <div className="space-y-3">
+                    <Progress value={66} className="h-2" />
+                    <p className="text-sm text-gray-600 text-center">
+                      Analyse en cours... Cela peut prendre quelques secondes.
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         ) : (
+          /* Analysis Results */
           <div className="space-y-8">
             {/* Overall Score */}
             <Card className="bg-white/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>Score global d'optimisation</span>
-                  <Badge className="bg-blue-100 text-blue-700 text-lg px-4 py-2">
-                    {analysisResults.overallScore}/100
-                  </Badge>
-                </CardTitle>
+                <CardTitle className="text-center">Score Global</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-4">
-                  <Progress value={analysisResults.overallScore} className="flex-1 h-4" />
-                  <span className={`text-2xl font-bold ${getScoreColor(analysisResults.overallScore)}`}>
-                    {analysisResults.overallScore}%
-                  </span>
+              <CardContent className="text-center">
+                <div className="text-6xl font-bold text-blue-600 mb-4">
+                  {analysisResults.overallScore}%
                 </div>
-                <p className="text-gray-600 mt-3">
-                  Votre CV est bien structuré avec quelques améliorations possibles pour maximiser son impact.
-                </p>
+                <p className="text-gray-600">Votre CV est bien optimisé avec quelques améliorations possibles</p>
               </CardContent>
             </Card>
 
-            {/* Detailed Analysis */}
+            {/* Detailed Scores */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="bg-white/80 backdrop-blur-sm">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl font-bold text-green-600 mb-2">
+                    {analysisResults.keywordMatch}%
+                  </div>
+                  <p className="text-sm text-gray-600">Correspondance mots-clés</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-white/80 backdrop-blur-sm">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl font-bold text-blue-600 mb-2">
+                    {analysisResults.readabilityScore}%
+                  </div>
+                  <p className="text-sm text-gray-600">Lisibilité</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-white/80 backdrop-blur-sm">
+                <CardContent className="p-6 text-center">
+                  <div className="text-2xl font-bold text-purple-600 mb-2">
+                    {analysisResults.atsCompatibility}%
+                  </div>
+                  <p className="text-sm text-gray-600">Compatibilité ATS</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Strengths and Improvements */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <Card className="bg-white/80 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle>Analyse détaillée</CardTitle>
-                    <CardDescription>Évaluation par catégorie</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {analysisResults.categories.map((category, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            {getStatusIcon(category.status)}
-                            <span className="font-medium">{category.name}</span>
-                          </div>
-                          <span className={`font-bold ${getScoreColor(category.score)}`}>
-                            {category.score}%
-                          </span>
-                        </div>
-                        <Progress value={category.score} className="h-2" />
-                        <ul className="text-sm text-gray-600 ml-7">
-                          {category.improvements.map((improvement, idx) => (
-                            <li key={idx}>• {improvement}</li>
-                          ))}
-                        </ul>
-                      </div>
+              <Card className="bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-green-600">Points forts</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {analysisResults.strengths.map((strength, index) => (
+                      <li key={index} className="flex items-start">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
+                        <span className="text-gray-700">{strength}</span>
+                      </li>
                     ))}
-                  </CardContent>
-                </Card>
+                  </ul>
+                </CardContent>
+              </Card>
 
-                <Card className="bg-white/80 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Target className="h-5 w-5 mr-2" />
-                      Mots-clés manquants
-                    </CardTitle>
-                    <CardDescription>
-                      Mots-clés populaires dans votre secteur
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {analysisResults.keywordsMissing.map((keyword, index) => (
-                        <Badge key={index} variant="outline" className="border-orange-300 text-orange-700">
-                          {keyword}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div>
-                <Card className="bg-white/80 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle>Suggestions d'amélioration</CardTitle>
-                    <CardDescription>
-                      Recommandations personnalisées par notre IA
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {analysisResults.suggestedImprovements.map((suggestion, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <div className="bg-blue-100 rounded-full p-1 mt-1">
-                          <CheckCircle className="h-4 w-4 text-blue-600" />
-                        </div>
-                        <p className="text-gray-700 leading-relaxed">{suggestion}</p>
-                      </div>
+              <Card className="bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-orange-600">Améliorations suggérées</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {analysisResults.improvements.map((improvement, index) => (
+                      <li key={index} className="flex items-start">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0" />
+                        <span className="text-gray-700">{improvement}</span>
+                      </li>
                     ))}
-                  </CardContent>
-                </Card>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
 
-                <div className="mt-6 space-y-4">
-                  <Button className="w-full" size="lg">
-                    <Download className="h-5 w-5 mr-2" />
-                    Télécharger le rapport détaillé
-                  </Button>
-                  <Button variant="outline" className="w-full" size="lg">
-                    Comparer avec une offre d'emploi
-                  </Button>
-                </div>
-              </div>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600">
+                Télécharger le rapport complet
+              </Button>
+              <Button variant="outline" size="lg">
+                Analyser un autre CV
+              </Button>
+              <Link to="/job-matching">
+                <Button variant="outline" size="lg">
+                  <Target className="h-5 w-5 mr-2" />
+                  Comparer avec une offre
+                </Button>
+              </Link>
             </div>
           </div>
         )}
