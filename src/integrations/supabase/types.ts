@@ -14,7 +14,185 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          industry: string | null
+          logo_url: string | null
+          name: string
+          owner_id: string
+          size: string | null
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name: string
+          owner_id: string
+          size?: string | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name?: string
+          owner_id?: string
+          size?: string | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      job_applications: {
+        Row: {
+          candidate_id: string
+          cover_letter: string | null
+          created_at: string | null
+          id: string
+          job_offer_id: string
+          match_score: number | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          candidate_id: string
+          cover_letter?: string | null
+          created_at?: string | null
+          id?: string
+          job_offer_id: string
+          match_score?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          candidate_id?: string
+          cover_letter?: string | null
+          created_at?: string | null
+          id?: string
+          job_offer_id?: string
+          match_score?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_job_offer_id_fkey"
+            columns: ["job_offer_id"]
+            isOneToOne: false
+            referencedRelation: "job_offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_offers: {
+        Row: {
+          company_id: string
+          contract_type: string | null
+          created_at: string | null
+          description: string
+          experience_required: number | null
+          id: string
+          location: string | null
+          required_skills: string[] | null
+          salary_range: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company_id: string
+          contract_type?: string | null
+          created_at?: string | null
+          description: string
+          experience_required?: number | null
+          id?: string
+          location?: string | null
+          required_skills?: string[] | null
+          salary_range?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          contract_type?: string | null
+          created_at?: string | null
+          description?: string
+          experience_required?: number | null
+          id?: string
+          location?: string | null
+          required_skills?: string[] | null
+          salary_range?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_offers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          cv_url: string | null
+          education: string | null
+          email: string | null
+          experience_years: number | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          skills: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          cv_url?: string | null
+          education?: string | null
+          email?: string | null
+          experience_years?: number | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          skills?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          cv_url?: string | null
+          education?: string | null
+          email?: string | null
+          experience_years?: number | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          skills?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
